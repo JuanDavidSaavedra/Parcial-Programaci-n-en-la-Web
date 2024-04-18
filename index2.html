@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Resultados</h1>
+            <table class="table is-fullwidth">
+                <tbody>
+                    <tr>
+                        <th><img src="usuario.png" alt="Usuario" style="max-width: 20px;"></th>
+                        <td id="usuario"></td>
+                    </tr>
+                    <tr>
+                        <th><img src="correo.png" alt="Correo" style="max-width: 20px;"></th>
+                        <td id="email"></td>
+                    </tr>
+                    <tr>
+                        <th><img src="telefono.png" alt="Teléfono" style="max-width: 20px;"></th>
+                        <td id="telefono"></td>
+                    </tr>
+                    <tr>
+                        <th><img src="gusto.png" alt="Gusto" style="max-width: 20px;"></th>
+                        <td id="gusto"></td>
+                    </tr>
+                    <tr>
+                        <th><img src="porcentaje.png" alt="Porcentaje" style="max-width: 20px;"></th>
+                        <td id="porcentaje"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script>
+        // Función para obtener los parámetros de la URL
+        function obtenerParametrosUrl() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var parametros = {};
+            for (const [key, value] of urlParams) {
+                parametros[key] = value;
+            }
+            return parametros;
+        }
+
+        // Función para colocar los datos en la tabla
+        function colocarDatosEnTabla() {
+            var parametros = obtenerParametrosUrl();
+            document.getElementById('usuario').textContent = parametros.usuario || '';
+            document.getElementById('email').textContent = parametros.email || '';
+            document.getElementById('telefono').textContent = parametros.telefono || '';
+            document.getElementById('gusto').textContent = parametros.gusto || '';
+            document.getElementById('porcentaje').textContent = parametros.porc || '';
+        }
+
+        // Llamar a la función al cargar la página
+        window.onload = colocarDatosEnTabla;
+    </script>
+</html>

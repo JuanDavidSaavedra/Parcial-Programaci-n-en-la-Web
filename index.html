@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebDeveloper</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 50px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        .btn-outline-custom {
+            color: #ffffff;
+            border-color: #0069d9;
+            background-color: #0069d9;
+        }
+        .btn-outline-custom:hover {
+            color: #ffffff;
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .list-group-item {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            text-align: center;
+        }
+        .image-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title has-text-centered">
+                <span style="color: gray;">Web</span><span style="font-weight: bold;">Developer</span>
+            </h1>
+            <h2 class="subtitle has-text-centered">Formulario de afiliación</h2>
+            <form action="index2.html" method="get">
+                <div class="field">
+                    <label class="label">Nombre de usuario</label>
+                    <div class="control has-icons-right">
+                        <input class="input" type="text" placeholder="Usuario" name="usuario">
+                        <span class="icon is-small is-right">
+                            <img src="usuario.png" alt="Usuario">
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Correo electrónico</label>
+                    <div class="control has-icons-right">
+                        <input class="input" type="email" placeholder="Correo electrónico" name="email">
+                        <span class="icon is-small is-right">
+                            <img src="correo.png" alt="Correo">
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Teléfono</label>
+                    <div class="control has-icons-right">
+                        <input class="input" type="tel" placeholder="Teléfono" name="telefono">
+                        <span class="icon is-small is-right">
+                            <img src="telefono.png" alt="Teléfono">
+                        </span>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control is-expanded">
+                        <label class="label">Gusto</label>
+                        <input class="input" type="text" placeholder="Gusto" maxlength="25" name="gusto">
+                    </div>
+                    <div class="control">
+                        <br>
+                        <button type="button" class="button is-success" onclick="addGusto()">Gustos</button>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <br>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Gusto</th>
+                        <th>%</th>
+                        <th>edit</th>
+                    </tr>
+                </thead>
+                <tbody id="gustosTableBody">
+                    <!-- Aquí se añadirán los gustos ingresados -->
+                </tbody>
+            </table>
+            <p><i>Pulse Aceptar para guardar los cambios o cancelar para anularlos</i></p>
+            <div class="buttons">
+                <button class="button is-success" onclick="ejecutar2Funciones()">Aceptar</button>
+                <button class="button is-danger" onclick="cancelarCambios()">Cancelar</button>
+            </div>
+            <a id="linkToIndex2" href="#" onclick="generarEnlace()">Ir a Site de P Web</a>
+        </div>
+    </section>
+
+    <script>
+        function addGusto() {
+            // Obtener el valor del gusto ingresado por el usuario
+            var gusto = document.querySelector('input[name="gusto"]').value.trim();
+
+            // Verificar si se ingresó un gusto válido
+            if (gusto !== '') {
+                // Crear una nueva fila en la tabla de gustos
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${gusto}</td>
+                    <td>0</td>
+                    <td><button class="button is-link" onclick="editGusto(this)">Editar</button></td>
+                `;
+
+                // Agregar la fila a la tabla de gustos
+                document.getElementById('gustosTableBody').appendChild(row);
+
+                // Limpiar el campo de entrada de gusto
+                document.querySelector('input[name="gusto"]').value = '';
+            }
+        }
+
+        function editGusto(button) {
+            // Verificar si ya hay otra fila en edición
+            var editingRow = document.querySelector('.editing');
+            if (editingRow && editingRow !== button.parentNode.parentNode) {
+                alert('Solo se puede editar una línea. Recargue la página para poder editar otra.');
+                return;
+            }
+
+            // Obtener la fila actual y marcarla como en edición
+            var row = button.parentNode.parentNode;
+            row.classList.add('editing');
+
+            // Cambiar el botón de "Editar" a "En Edición"
+            button.textContent = 'En Edición';
+            button.classList.remove('is-link');
+            button.classList.add('is-light');
+
+            // Convertir las celdas de la fila en editables
+            var cells = row.querySelectorAll('td:first-child, td:nth-child(2)');
+            cells.forEach(cell => {
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.value = cell.textContent;
+                cell.textContent = '';
+                cell.appendChild(input);
+            });
+        }
+
+        function aceptarCambios() {
+            // Obtener la URL de destino
+            var form = document.querySelector('form');
+            var url = form.action;
+
+            // Crear un objeto FormData para recoger los datos del formulario
+            var formData = new FormData(form);
+
+            // Obtener las filas editadas
+            var editingRows = document.querySelectorAll('.editing');
+            editingRows.forEach(row => {
+                // Obtener los datos editados de la fila
+                var gusto = row.querySelector('td:first-child input').value;
+                var porcentaje = row.querySelector('td:nth-child(2) input').value;
+
+                // Agregar los datos editados al FormData
+                formData.append('gusto', gusto);
+                formData.append('porc', porcentaje);
+
+                // Quitar la clase de edición y restaurar los botones de "Editar"
+                row.classList.remove('editing');
+                var editButton = row.querySelector('button');
+                editButton.textContent = 'Editar';
+                editButton.classList.remove('is-light');
+                editButton.classList.add('is-link');
+            });
+
+            // Enviar los datos al servidor
+            fetch(index2.html, {
+                method: 'GET',
+                body: formData
+            }).then(response => {
+                // Redirigir a la página de resultado
+                window.location.href = index2.html;
+            }).catch(error => {
+                console.error('Error al enviar los datos:', error);
+            });
+        }
+
+        function cancelarCambios() {
+            // Recargar la página para restaurar la tabla original
+            window.location.reload();
+        }
+        function generarEnlace() {
+            // Obtener los valores de los campos del formulario
+            var usuario = document.querySelector('input[name="usuario"]').value.trim();
+            var email = document.querySelector('input[name="email"]').value.trim();
+            var telefono = document.querySelector('input[name="telefono"]').value.trim();
+            var gusto = document.querySelector('input[name="gusto"]').value.trim();
+            var porcentaje = '0';
+
+            // Construir la URL con los parámetros de los datos del formulario
+            var url = 'index2.html?usuario=' + encodeURIComponent(usuario) + '&email=' + encodeURIComponent(email) + '&telefono=' + encodeURIComponent(telefono) + '&gusto=' + encodeURIComponent(gusto) + '&porc=' + encodeURIComponent(porcentaje);
+
+            // Redirigir al usuario a la página index2.html con los datos prellenados en la URL
+            window.location.href = url;
+        }
+        function ejecutar2Funciones() {
+            aceptarCambios();
+            generarEnlace();
+        }
+    </script>
+</body>
+</html>
