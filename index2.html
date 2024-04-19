@@ -5,60 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        /* Estilo para que el texto en la tabla tenga color blanco */
+        table tbody td {
+            color: white;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        td{
+            border-radius: 10px; 
+        }
+    </style>
 </head>
 <body>
     <section class="section">
+        <h1 class="title has-text-centered">Resultados</h1>
         <div class="container">
-            <h1 class="title">Resultados</h1>
             <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th><img src="usuario.png" alt="Usuario" style="max-width: 120px; border-radius: 5% "></th>
+                        <td id="usuario" class="title"></td>
+                    </tr>
+                </thead>
                 <tbody>
                     <tr>
-                        <th><img src="usuario.png" alt="Usuario" style="max-width: 20px;"></th>
-                        <td id="usuario"></td>
+                        <th><img src="correo.png" alt="Correo" style="max-width: 20px;"><span style="margin-left: 10px;">Email</span></th>
+                        <td id="email" style="background-color: rgb(0, 106, 255); "></td>
                     </tr>
                     <tr>
-                        <th><img src="correo.png" alt="Correo" style="max-width: 20px;"></th>
-                        <td id="email"></td>
+                        <th><img src="telefono.png" alt="Teléfono" style="max-width: 20px;"><span style="margin-left: 10px;">Teléfono</span></th>
+                        <td id="telefono" style="background-color: rgb(236, 191, 10); "></td>
                     </tr>
                     <tr>
-                        <th><img src="telefono.png" alt="Teléfono" style="max-width: 20px;"></th>
-                        <td id="telefono"></td>
+                        <th><img src="gusto.png" alt="Gusto" style="max-width: 20px;"><span style="margin-left: 10px;">Gusto</span></th>
+                        <td id="gusto" style="background-color: rgb(39, 198, 92); "></td>
                     </tr>
                     <tr>
-                        <th><img src="gusto.png" alt="Gusto" style="max-width: 20px;"></th>
-                        <td id="gusto"></td>
-                    </tr>
-                    <tr>
-                        <th><img src="porcentaje.png" alt="Porcentaje" style="max-width: 20px;"></th>
-                        <td id="porcentaje"></td>
+                        <th><img src="porcentaje.png" alt="Porcentaje" style="max-width: 20px;"><span style="margin-left: 10px;">Porcentaje %</span></th>
+                        <td id="porcentaje" style="background-color: rgb(238, 79, 79); "></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
-
     <script>
-        // Función para obtener los parámetros de la URL
-        function obtenerParametrosUrl() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var parametros = {};
-            for (const [key, value] of urlParams) {
-                parametros[key] = value;
-            }
-            return parametros;
-        }
-
-        // Función para colocar los datos en la tabla
-        function colocarDatosEnTabla() {
-            var parametros = obtenerParametrosUrl();
-            document.getElementById('usuario').textContent = parametros.usuario || '';
-            document.getElementById('email').textContent = parametros.email || '';
-            document.getElementById('telefono').textContent = parametros.telefono || '';
-            document.getElementById('gusto').textContent = parametros.gusto || '';
-            document.getElementById('porcentaje').textContent = parametros.porc || '';
-        }
-
-        // Llamar a la función al cargar la página
-        window.onload = colocarDatosEnTabla;
+        // Obtener los parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const usuarioValue = urlParams.get('usuario');
+        const emailValue = urlParams.get('email');
+        const telefonoValue = urlParams.get('telefono');
+        const gustoValue = urlParams.get('gusto'); // Modificado aquí
+        const porcentajeValue = urlParams.get('porcentaje');
+    
+        // Colocar los valores obtenidos en los campos respectivos
+        document.getElementById('usuario').textContent = usuarioValue + '\n\n - Ficha';
+        document.getElementById('email').textContent = emailValue;
+        document.getElementById('telefono').textContent = telefonoValue;
+        document.getElementById('gusto').textContent = gustoValue; // Modificado aquí
+        document.getElementById('porcentaje').textContent = porcentajeValue;
     </script>
+</body>
 </html>

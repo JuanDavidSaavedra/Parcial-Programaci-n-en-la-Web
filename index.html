@@ -17,34 +17,16 @@
             padding: 30px;
             margin-top: 50px;
         }
-        .btn-outline-custom {
-            color: #ffffff;
-            border-color: #0069d9;
-            background-color: #0069d9;
-        }
-        .btn-outline-custom:hover {
-            color: #ffffff;
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-        .list-group-item {
-            background-color: #f8f9fa;
-            border-color: #dee2e6;
-            text-align: center;
-        }
-        .image-container {
-            text-align: center;
-        }
     </style>
 </head>
 <body>
     <section class="section">
+        <h1 class="title has-text-centered">
+            <span style="font-weight: bold;">Web</span><span style="color: gray;">Developer</span>
+        </h1>
         <div class="container">
-            <h1 class="title has-text-centered">
-                <span style="color: gray;">Web</span><span style="font-weight: bold;">Developer</span>
-            </h1>
             <h2 class="subtitle has-text-centered">Formulario de afiliación</h2>
-            <form action="index2.html" method="get">
+            <form action="index2.html" method="post">
                 <div class="field">
                     <label class="label">Nombre de usuario</label>
                     <div class="control has-icons-right">
@@ -74,10 +56,10 @@
                 </div>
                 <div class="field is-grouped">
                     <div class="control is-expanded">
-                        <label class="label">Gusto</label>
+                        <label class="label">Gustos</label>
                         <input class="input" type="text" placeholder="Gusto" maxlength="25" name="gusto">
                     </div>
-                    <div class="control">
+                    <div class="control" style="margin-top: 1.5%;">
                         <br>
                         <button type="button" class="button is-success" onclick="addGusto()">Gustos</button>
                     </div>
@@ -97,12 +79,15 @@
                     <!-- Aquí se añadirán los gustos ingresados -->
                 </tbody>
             </table>
+            <br>
             <p><i>Pulse Aceptar para guardar los cambios o cancelar para anularlos</i></p>
+            <br>
             <div class="buttons">
-                <button class="button is-success" onclick="ejecutar2Funciones()">Aceptar</button>
+                <button class="button is-success" onclick="generarEnlace()">Aceptar</button>
                 <button class="button is-danger" onclick="cancelarCambios()">Cancelar</button>
             </div>
-            <a id="linkToIndex2" href="#" onclick="generarEnlace()">Ir a Site de P Web</a>
+            <br>
+            <a id="linkToIndex2" href="#" onclick="aceptarCambios()">Ir a Site de P Web</a>
         </div>
     </section>
 
@@ -123,9 +108,6 @@
 
                 // Agregar la fila a la tabla de gustos
                 document.getElementById('gustosTableBody').appendChild(row);
-
-                // Limpiar el campo de entrada de gusto
-                document.querySelector('input[name="gusto"]').value = '';
             }
         }
 
@@ -141,10 +123,16 @@
             var row = button.parentNode.parentNode;
             row.classList.add('editing');
 
-            // Cambiar el botón de "Editar" a "En Edición"
-            button.textContent = 'En Edición';
-            button.classList.remove('is-link');
-            button.classList.add('is-light');
+            // Cambiar el botón de "Editar" a "En Edición" y viceversa
+            if (button.textContent === 'Editar') {
+                button.textContent = 'En Edición';
+                button.classList.remove('is-link');
+                button.classList.add('is-light');
+            } else {
+                button.textContent = 'Editar';
+                button.classList.remove('is-light');
+                button.classList.add('is-link');
+            }
 
             // Convertir las celdas de la fila en editables
             var cells = row.querySelectorAll('td:first-child, td:nth-child(2)');
@@ -174,49 +162,39 @@
 
                 // Agregar los datos editados al FormData
                 formData.append('gusto', gusto);
-                formData.append('porc', porcentaje);
-
-                // Quitar la clase de edición y restaurar los botones de "Editar"
-                row.classList.remove('editing');
-                var editButton = row.querySelector('button');
-                editButton.textContent = 'Editar';
-                editButton.classList.remove('is-light');
-                editButton.classList.add('is-link');
+                formData.append('porcentaje', porcentaje); // ajuste de nombre de campo
             });
 
             // Enviar los datos al servidor
-            fetch(index2.html, {
-                method: 'GET',
+            fetch(url, {
+                method: 'POST',
                 body: formData
             }).then(response => {
                 // Redirigir a la página de resultado
-                window.location.href = index2.html;
+                window.location.href = url + '?' + new URLSearchParams(formData).toString();
             }).catch(error => {
                 console.error('Error al enviar los datos:', error);
             });
         }
 
-        function cancelarCambios() {
-            // Recargar la página para restaurar la tabla original
-            window.location.reload();
-        }
         function generarEnlace() {
             // Obtener los valores de los campos del formulario
             var usuario = document.querySelector('input[name="usuario"]').value.trim();
             var email = document.querySelector('input[name="email"]').value.trim();
             var telefono = document.querySelector('input[name="telefono"]').value.trim();
             var gusto = document.querySelector('input[name="gusto"]').value.trim();
-            var porcentaje = '0';
+            var porcentaje = document.querySelector('input[name="porcentaje"]').value.trim();
 
             // Construir la URL con los parámetros de los datos del formulario
-            var url = 'index2.html?usuario=' + encodeURIComponent(usuario) + '&email=' + encodeURIComponent(email) + '&telefono=' + encodeURIComponent(telefono) + '&gusto=' + encodeURIComponent(gusto) + '&porc=' + encodeURIComponent(porcentaje);
+            var url = 'index2.html?usuario=' + encodeURIComponent(usuario) + '&email=' + encodeURIComponent(email) + '&telefono=' + encodeURIComponent(telefono) + '&gusto[]=' + encodeURIComponent(gusto) + '&porcentaje[]=' + encodeURIComponent(porcentaje);
 
             // Redirigir al usuario a la página index2.html con los datos prellenados en la URL
             window.location.href = url;
         }
-        function ejecutar2Funciones() {
-            aceptarCambios();
-            generarEnlace();
+
+        function cancelarCambios() {
+            // Recargar la página para restaurar la tabla original
+            window.location.reload();
         }
     </script>
 </body>
