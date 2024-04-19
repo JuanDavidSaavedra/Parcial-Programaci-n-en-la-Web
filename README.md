@@ -1,4 +1,4 @@
-# Parcial-Programaci-n-en-la-Web
+# Parcial Programación en la Web
 
 # Nombre: Juan David Saavedra González
 
